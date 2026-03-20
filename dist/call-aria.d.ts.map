@@ -1,0 +1,1 @@
+{"version":3,"file":"call-aria.d.ts","sourceRoot":"","sources":["../src/call-aria.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAMH,MAAM,WAAW,kBAAkB;IACjC,OAAO,EAAE,MAAM,CAAC;IAChB,UAAU,EAAE,MAAM,CAAC;IACnB,OAAO,CAAC,EAAE,OAAO,CAAC;IAClB,OAAO,CAAC,EAAE,MAAM,CAAC;CAClB;AAED,wBAAsB,QAAQ,CAAC,GAAG,EAAE,kBAAkB,GAAG,OAAO,CAAC,OAAO,CAAC,CAgCxE"}

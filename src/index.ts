@@ -85,6 +85,26 @@ function loadState(): void {
   }
   sessions = getAllSessions();
   registeredGroups = getAllRegisteredGroups();
+
+  // Auto-register group from TELEGRAM_GROUP_CHAT_ID env var if not already registered
+  const autoGroupId = process.env.TELEGRAM_GROUP_CHAT_ID;
+  if (autoGroupId) {
+    const jid = `tg:${autoGroupId}`;
+    if (!registeredGroups[jid]) {
+      const groupName = process.env.ASSISTANT_NAME || 'main';
+      registerGroup(jid, {
+        name: groupName,
+        folder: groupName.toLowerCase(),
+        trigger: `@${groupName}`,
+        added_at: new Date().toISOString(),
+        requiresTrigger: false,
+        isMain: Object.keys(registeredGroups).length === 0,
+      });
+      registeredGroups = getAllRegisteredGroups();
+      logger.info({ jid, groupName }, 'Auto-registered group from TELEGRAM_GROUP_CHAT_ID');
+    }
+  }
+
   logger.info(
     { groupCount: Object.keys(registeredGroups).length },
     'State loaded',
