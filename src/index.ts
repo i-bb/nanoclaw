@@ -581,8 +581,9 @@ async function main(): Promise<void> {
   // Create and connect all registered channels.
   // Each channel self-registers via the barrel import above.
   // Factories return null when credentials are missing, so unconfigured channels are skipped.
-  console.log('[main] registered channel names:', getRegisteredChannelNames());
-  for (const channelName of getRegisteredChannelNames()) {
+  const registeredNames = getRegisteredChannelNames();
+  logger.info({ registeredNames }, 'Registered channel names');
+  for (const channelName of registeredNames) {
     const factory = getChannelFactory(channelName)!;
     const channel = factory(channelOpts);
     if (!channel) {
@@ -596,7 +597,7 @@ async function main(): Promise<void> {
     await channel.connect();
   }
   if (channels.length === 0) {
-    logger.fatal('No channels connected');
+    logger.fatal({ registeredNames }, 'No channels connected');
     process.exit(1);
   }
 
