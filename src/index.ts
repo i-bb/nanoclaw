@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { startAgentApiServer } from './agent-api.js';
 
 import {
   ASSISTANT_NAME,
@@ -476,6 +477,7 @@ async function main(): Promise<void> {
   logger.info('Database initialized');
   loadState();
   restoreRemoteControl();
+  startAgentApiServer();
 
   // Start credential proxy (containers route API calls through this)
   const proxyServer = await startCredentialProxy(
