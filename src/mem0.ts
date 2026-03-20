@@ -9,8 +9,8 @@
 
 const MEM0_API_URL = process.env.MEM0_API_URL;
 const MEM0_API_KEY = process.env.MEM0_API_KEY;
-const AGENT_ID = "echo";
-const USER_ID = "operator";
+const AGENT_ID = 'echo';
+const USER_ID = 'operator';
 const TOP_K = 8;
 
 interface Mem0Memory {
@@ -23,15 +23,18 @@ interface Mem0SearchResult {
   results: Mem0Memory[];
 }
 
-async function mem0Fetch(path: string, options: RequestInit): Promise<Response> {
+async function mem0Fetch(
+  path: string,
+  options: RequestInit,
+): Promise<Response> {
   if (!MEM0_API_URL || !MEM0_API_KEY) {
-    throw new Error("[mem0] MEM0_API_URL and MEM0_API_KEY must be set");
+    throw new Error('[mem0] MEM0_API_URL and MEM0_API_KEY must be set');
   }
   return fetch(`${MEM0_API_URL}${path}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
-      "X-API-Key": MEM0_API_KEY,
+      'Content-Type': 'application/json',
+      'X-API-Key': MEM0_API_KEY,
       ...(options.headers || {}),
     },
   });
@@ -39,8 +42,8 @@ async function mem0Fetch(path: string, options: RequestInit): Promise<Response> 
 
 export async function recallMemories(query: string): Promise<string> {
   try {
-    const res = await mem0Fetch("/memories/search", {
-      method: "POST",
+    const res = await mem0Fetch('/memories/search', {
+      method: 'POST',
       body: JSON.stringify({
         query,
         user_id: USER_ID,
@@ -48,60 +51,63 @@ export async function recallMemories(query: string): Promise<string> {
         limit: TOP_K,
       }),
     });
-    if (!res.ok) return "";
+    if (!res.ok) return '';
     const data = (await res.json()) as Mem0SearchResult;
-    if (!data.results?.length) return "";
-    const lines = data.results.map((m) => `- ${m.memory}`).join("\n");
+    if (!data.results?.length) return '';
+    const lines = data.results.map((m) => `- ${m.memory}`).join('\n');
     return `[Recalled memories — agent: echo]\n${lines}`;
   } catch (err) {
-    console.error("[mem0] recall error:", err);
-    return "";
+    console.error('[mem0] recall error:', err);
+    return '';
   }
 }
 
 export async function captureMemory(
   userMessage: string,
   assistantMessage: string,
-  sessionTag?: string
+  sessionTag?: string,
 ): Promise<void> {
   try {
-    await mem0Fetch("/memories", {
-      method: "POST",
+    await mem0Fetch('/memories', {
+      method: 'POST',
       body: JSON.stringify({
         messages: [
-          { role: "user", content: userMessage },
-          { role: "assistant", content: assistantMessage },
+          { role: 'user', content: userMessage },
+          { role: 'assistant', content: assistantMessage },
         ],
         user_id: USER_ID,
         agent_id: AGENT_ID,
         metadata: {
-          source: sessionTag ? "handoff" : "echo",
+          source: sessionTag ? 'handoff' : 'echo',
           sessionTag: sessionTag ?? null,
         },
       }),
     });
   } catch (err) {
-    console.error("[mem0] capture error:", err);
+    console.error('[mem0] capture error:', err);
   }
 }
 
 export async function captureRoutingDecision(
   decision: string,
-  reasoning: string
+  reasoning: string,
 ): Promise<void> {
   try {
-    await mem0Fetch("/memories", {
-      method: "POST",
+    await mem0Fetch('/memories', {
+      method: 'POST',
       body: JSON.stringify({
         messages: [
-          { role: "assistant", content: `Routing decision: ${decision}. Reasoning: ${reasoning}` },
+          {
+            role: 'assistant',
+            content: `Routing decision: ${decision}. Reasoning: ${reasoning}`,
+          },
         ],
         user_id: USER_ID,
         agent_id: AGENT_ID,
-        metadata: { source: "routing" },
+        metadata: { source: 'routing' },
       }),
     });
   } catch (err) {
-    console.error("[mem0] routing capture error:", err);
+    console.error('[mem0] routing capture error:', err);
   }
 }
