@@ -284,6 +284,7 @@ export class TelegramChannel implements Channel {
 }
 
 registerChannel('telegram', (opts: ChannelOpts) => {
+  console.log('[telegram] factory called, TELEGRAM_BOT_TOKEN set:', !!process.env.TELEGRAM_BOT_TOKEN, 'length:', (process.env.TELEGRAM_BOT_TOKEN || '').length);
   const envVars = readEnvFile(['TELEGRAM_BOT_TOKEN']);
   const token =
     process.env.TELEGRAM_BOT_TOKEN || envVars.TELEGRAM_BOT_TOKEN || '';
@@ -291,5 +292,6 @@ registerChannel('telegram', (opts: ChannelOpts) => {
     logger.warn('Telegram: TELEGRAM_BOT_TOKEN not set');
     return null;
   }
+  console.log('[telegram] returning TelegramChannel');
   return new TelegramChannel(token, opts);
 });

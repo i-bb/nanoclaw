@@ -204,14 +204,14 @@ export class TelegramChannel {
     }
 }
 registerChannel('telegram', (opts) => {
-    console.log('[telegram] factory called, TELEGRAM_BOT_TOKEN set:', !!process.env.TELEGRAM_BOT_TOKEN);
+    console.log('[telegram] factory called, TELEGRAM_BOT_TOKEN set:', !!process.env.TELEGRAM_BOT_TOKEN, 'length:', (process.env.TELEGRAM_BOT_TOKEN || '').length);
     const envVars = readEnvFile(['TELEGRAM_BOT_TOKEN']);
     const token = process.env.TELEGRAM_BOT_TOKEN || envVars.TELEGRAM_BOT_TOKEN || '';
     if (!token) {
         logger.warn('Telegram: TELEGRAM_BOT_TOKEN not set');
         return null;
     }
-    console.log('[telegram] returning TelegramChannel instance');
+    console.log('[telegram] returning TelegramChannel');
     return new TelegramChannel(token, opts);
 });
 //# sourceMappingURL=telegram.js.map
