@@ -10,8 +10,7 @@ FROM node:20-slim
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --production
-
+COPY --from=builder /build/node_modules ./node_modules/
 COPY --from=builder /build/dist ./dist/
 
 RUN mkdir -p /data/store /data/groups /data/data
