@@ -1,0 +1,1 @@
+{"version":3,"file":"agent-api.d.ts","sourceRoot":"","sources":["../src/agent-api.ts"],"names":[],"mappings":"AASA,MAAM,WAAW,eAAe;IAC9B,IAAI,EAAE,MAAM,CAAC;IACb,OAAO,CAAC,EAAE,MAAM,CAAC;IACjB,QAAQ,EAAE,OAAO,GAAG,SAAS,CAAC;IAC9B,UAAU,EAAE,MAAM,CAAC;CACpB;AAkBD,wBAAgB,mBAAmB,SA6DlC"}
